@@ -20,7 +20,7 @@ A high-frequency market making system for cryptocurrency markets, focusing on Bi
 ## Project Structure
 
 ```
-Market_Maker/
+Trading Engine/
 ├── src/                      # Source code
 │   ├── cli.py               # Command line interface
 │   ├── common/              # Shared utilities
