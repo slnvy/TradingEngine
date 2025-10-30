@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build
+        pip install -e ".[dev]"  # Install project with development dependencies
+        pip install pytest-asyncio  # Ensure we have this for async tests
+        # Ensure Python's bin directory is in PATH
+        echo "$(python -m site --user-base)/bin" >> $GITHUB_PATH
+    
+    - name: Run linting
+      run: |
+        make lint
+    
+    - name: Run tests
+      run: |
+        make test
+      env:
+        REDIS_URL: redis://localhost:6379
+        BINANCE_VENUE: VISION
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build
+    
+    - name: Verify package builds
+      run: |
+        python -m build 

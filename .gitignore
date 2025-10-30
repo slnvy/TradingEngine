@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Data
+data/raw/
+data/processed/
+data/models/
+*.parquet
+*.csv
+backtest_result.csv
+backtest_results.csv
+
+# Task files
+task*.md
+
+# Logs
+*.log
+
+# Debug files
+test_*_debug.py
+test_task_*.py
+test_*_data.py
+
+# System files
+.DS_Store
+.pytest_cache/
+.mypy_cache/
+node_modules/
+
+# Test data
+test_data/
